@@ -9,9 +9,17 @@
             background-color: #388e3c;  /* Column Green */
             color: white;
             padding: 20px;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             font-size: 24px;
             font-weight: bold;
+        }
+
+        /* Logo styling */
+        .logo {
+            height: 40px;  /* Set the height of the logo */
+            width: auto;   /* Automatically adjust the width to keep the aspect ratio */
         }
 
         /* Progress Bar Style */
@@ -41,6 +49,13 @@
             bottom: 0;
             width: 100%;
             font-size: 14px;
+        }
+
+        /* Footer Link Styling */
+        .footer-bar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
         }
 
         /* Body Styling for some space */
@@ -78,6 +93,9 @@
 <body>
     <!-- Title Bar -->
     <div class="title-bar">
+        <!-- Logo in the left top corner -->
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+        <!-- Product Inventory Text -->
         Product Inventory
     </div>
 
@@ -91,7 +109,7 @@
 
     <!-- Footer Bar -->
     <div class="footer-bar">
-        For issues Contact AKP
+        For issues <a href="mailto:akp@example.com">Contact AKP</a>
     </div>
 </body>
 </html>
