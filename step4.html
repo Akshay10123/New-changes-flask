@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 4 - Snowflake Database Form</title>
+    <script>
+        let formCount = {{ form_count }};  // Keep track of the number of added forms
+
+        function addForm() {
+            formCount++;  // Increment the form counter
+            var formContainer = document.getElementById("form-container");
+            var newForm = document.createElement("div");
+
+            // Add a unique id based on formCount
+            newForm.id = "form-block-" + formCount;
+
+            // Copy only the inner HTML of the form (without the outer form tag)
+            newForm.innerHTML = `
+                <div>
+                    <label for="database_name-${formCount}">Database Name:</label>
+                    <input type="text" id="database_name-${formCount}" name="database_name-${formCount}" required><br><br>
+    
+                    <label for="schema_name-${formCount}">Schema Name:</label>
+                    <input type="text" id="schema_name-${formCount}" name="schema_name-${formCount}" required><br><br>
+    
+                    <label for="table_name-${formCount}">Table Name:</label>
+                    <input type="text" id="table_name-${formCount}" name="table_name-${formCount}" required><br><br>
+    
+                    <label for="data_type-${formCount}">Data Type:</label>
+                    <select id="data_type-${formCount}" name="data_type-${formCount}" required>
+                        <option value="Source">Source</option>
+                        <option value="Output">Output</option>
+                        <option value="Source and Output">Source and Output</option>
+                    </select><br><br>
+    
+                    <label for="valid_from-${formCount}">Valid From:</label>
+                    <input type="date" id="valid_from-${formCount}" name="valid_from-${formCount}" value="{{ form.valid_from.data }}" required><br><br>
+    
+                    <label for="valid_to-${formCount}">Valid To:</label>
+                    <input type="date" id="valid_to-${formCount}" name="valid_to-${formCount}" value="{{ form.valid_to.data }}" required><br><br>
+    
+                    <button type="button" onclick="removeForm(this)">Remove</button>
+                </div>
+            `;
+
+            formContainer.appendChild(newForm);
+        }
+
+        function removeForm(element) {
+            var formBlock = element.closest("div");  // Find the closest form block
+            formBlock.remove();  // Remove that form block from the DOM
+        }
+
+        function saveAndMove() {
+            alert("Forms saved successfully!");
+            window.location.href = "{{ url_for('step5') }}";  // Move to the next page
+        }
+    </script>
+</head>
+<body>
+    {% if form_count == 0 %}
+    <h1>Welcome to the Snowflake Database Form</h1>
+    <form method="POST">
+        <button type="submit" name="add">Add New Database</button>
+    </form>
+    <form method="POST">
+        <button type="submit" name="skip">Skip</button>
+    </form>
+    {% else %}
+    <h1>Add Snowflake Database Details</h1>
+    <form method="POST">
+        <div id="form-container">
+            {% for i in range(form_count) %}
+            <div>
+                <label for="database_name-{{ i }}">Database Name:</label>
+                <input type="text" id="database_name-{{ i }}" name="database_name-{{ i }}" required><br><br>
+
+                <label for="schema_name-{{ i }}">Schema Name:</label>
+                <input type="text" id="schema_name-{{ i }}" name="schema_name-{{ i }}" required><br><br>
+
+                <label for="table_name-{{ i }}">Table Name:</label>
+                <input type="text" id="table_name-{{ i }}" name="table_name-{{ i }}" required><br><br>
+
+                <label for="data_type-{{ i }}">Data Type:</label>
+                <select id="data_type-{{ i }}" name="data_type-{{ i }}" required>
+                    <option value="Source">Source</option>
+                    <option value="Output">Output</option>
+                    <option value="Source and Output">Source and Output</option>
+                </select><br><br>
+
+                <label for="valid_from-{{ i }}">Valid From:</label>
+                <input type="date" id="valid_from-{{ i }}" name="valid_from-{{ i }}" value="{{ form.valid_from.data }}" required><br><br>
+
+                <label for="valid_to-{{ i }}">Valid To:</label>
+                <input type="date" id="valid_to-{{ i }}" name="valid_to-{{ i }}" value="{{ form.valid_to.data }}" required><br><br>
+
+                <button type="button" onclick="removeForm(this)">Remove</button>
+            </div>
+            {% endfor %}
+        </div>
+        <button type="button" onclick="addForm()">Add Another Database</button><br><br>
+        <button type="submit" name="save" onclick="saveAndMove()">Save and Move to Next Page</button>
+    </form>
+    {% endif %}
+</body>
+</html>

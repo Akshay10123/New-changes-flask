@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Inventory</title>
+    
+    <script>
+        // Function to update progress bar based on current step
+        function updateProgressBar(step) {
+            const progressBar = document.getElementById("progress-bar");
+            let progressPercentage = 0;
+
+            // Assign progress based on the current step
+            if (step === 1) {
+                progressPercentage = 16;  // Step 1 = 16%
+            } else if (step === 2) {
+                progressPercentage = 32;  // Step 2 = 32%
+            } else if (step === 3) {
+                progressPercentage = 48;  // Step 3 = 48%
+            } else if (step === 4) {
+                progressPercentage = 64;  // Step 4 = 64%
+            } else if (step === 5) {
+                progressPercentage = 80;  // Step 5 = 80%
+            } else if (step === 6) {
+                progressPercentage = 100; // Step 6 = 100%
+            }
+
+            // Set the width of the progress bar
+            progressBar.style.width = progressPercentage + '%';
+        }
+    </script>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div id="progress-bar" class="progress-bar"></div>
+    </div>
+
+    <!-- Page Content -->
+    {% block content %}{% endblock %}
+</body>
+</html>

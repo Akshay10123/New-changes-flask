@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 6 - Platform Form</title>
+    <script>
+        let formCount = {{ form_count }};  // Keep track of the number of added forms
+
+        function addForm() {
+            formCount++;  // Increment the form counter
+            var formContainer = document.getElementById("form-container");
+            var newForm = document.createElement("div");
+
+            // Add a unique id based on formCount
+            newForm.id = "form-block-" + formCount;
+
+            // Copy only the inner HTML of the form (without the outer form tag)
+            newForm.innerHTML = `
+                <div>
+                    <label for="platform_name-${formCount}">Platform Name:</label>
+                    <input type="text" id="platform_name-${formCount}" name="platform_name-${formCount}" required><br><br>
+    
+                    <label for="platform_description-${formCount}">Platform Description:</label>
+                    <input type="text" id="platform_description-${formCount}" name="platform_description-${formCount}" required><br><br>
+    
+                    <label for="valid_from-${formCount}">Valid From:</label>
+                    <input type="date" id="valid_from-${formCount}" name="valid_from-${formCount}" value="{{ form.valid_from.data }}" required><br><br>
+    
+                    <label for="valid_to-${formCount}">Valid To:</label>
+                    <input type="date" id="valid_to-${formCount}" name="valid_to-${formCount}" value="{{ form.valid_to.data }}" required><br><br>
+    
+                    <button type="button" onclick="removeForm(this)">Remove</button>
+                </div>
+            `;
+
+            formContainer.appendChild(newForm);
+        }
+
+        function removeForm(element) {
+            var formBlock = element.closest("div");  // Find the closest form block
+            formBlock.remove();  // Remove that form block from the DOM
+        }
+
+        function saveAndMove() {
+            alert("Forms saved successfully!");
+            window.location.href = "{{ url_for('review') }}";  // Move to the Review Page
+        }
+    </script>
+</head>
+<body>
+    {% if form_count == 0 %}
+    <h1>Welcome to the Platform Form</h1>
+    <form method="POST">
+        <button type="submit" name="add">Add New Platform</button>
+    </form>
+    <form method="POST">
+        <button type="submit" name="skip">Skip</button>
+    </form>
+    {% else %}
+    <h1>Add Platform Details</h1>
+    <form method="POST">
+        <div id="form-container">
+            {% for i in range(form_count) %}
+            <div>
+                <label for="platform_name-{{ i }}">Platform Name:</label>
+                <input type="text" id="platform_name-{{ i }}" name="platform_name-{{ i }}" required><br><br>
+
+                <label for="platform_description-{{ i }}">Platform Description:</label>
+                <input type="text" id="platform_description-{{ i }}" name="platform_description-{{ i }}" required><br><br>
+
+                <label for="valid_from-{{ i }}">Valid From:</label>
+                <input type="date" id="valid_from-{{ i }}" name="valid_from-{{ i }}" value="{{ form.valid_from.data }}" required><br><br>
+
+                <label for="valid_to-{{ i }}">Valid To:</label>
+                <input type="date" id="valid_to-{{ i }}" name="valid_to-{{ i }}" value="{{ form.valid_to.data }}" required><br><br>
+
+                <button type="button" onclick="removeForm(this)">Remove</button>
+            </div>
+            {% endfor %}
+        </div>
+        <button type="button" onclick="addForm()">Add Another Platform</button><br><br>
+        <button type="submit" name="save" onclick="saveAndMove()">Save and Move to Review Page</button>
+    </form>
+    {% endif %}
+</body>
+</html>

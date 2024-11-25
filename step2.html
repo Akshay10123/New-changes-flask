@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Owner Form</title>
+    <script>
+        let formCount = {{ form_count }};  // Keep track of the number of added forms
+
+        function addForm() {
+            formCount++;  // Increment the form counter
+            var formContainer = document.getElementById("form-container");
+            var newForm = document.createElement("div");
+
+            // Add a unique id based on formCount
+            newForm.id = "form-block-" + formCount;
+
+            // Copy only the inner HTML of the form (without the outer form tag)
+            newForm.innerHTML = `
+                <div>
+                    <label for="owner_name-${formCount}">Product Owner Name:</label>
+                    <input type="text" id="owner_name-${formCount}" name="owner_name-${formCount}" required><br><br>
+    
+                    <label for="owner_zid-${formCount}">Product Owner ZID:</label>
+                    <input type="text" id="owner_zid-${formCount}" name="owner_zid-${formCount}" required><br><br>
+    
+                    <label for="owner_email-${formCount}">Product Owner Email ID:</label>
+                    <input type="email" id="owner_email-${formCount}" name="owner_email-${formCount}" required><br><br>
+    
+                    <label for="owner_type-${formCount}">Product Owner Type:</label>
+                    <select id="owner_type-${formCount}" name="owner_type-${formCount}" required>
+                        <option value="Member">Member</option>
+                        <option value="Owner">Owner</option>
+                    </select><br><br>
+    
+                    <label for="valid_from-${formCount}">Valid From:</label>
+                    <input type="date" id="valid_from-${formCount}" name="valid_from-${formCount}" value="{{ form.valid_from.data }}" required><br><br>
+    
+                    <label for="valid_to-${formCount}">Valid To:</label>
+                    <input type="date" id="valid_to-${formCount}" name="valid_to-${formCount}" value="{{ form.valid_to.data }}" required><br><br>
+    
+                    <button type="button" onclick="removeForm(this)">Remove</button>
+                </div>
+            `;
+
+            formContainer.appendChild(newForm);
+        }
+
+        function removeForm(element) {
+            var formBlock = element.closest("div");  // Find the closest form block
+            formBlock.remove();  // Remove that form block from the DOM
+        }
+
+        function saveAndMove() {
+            // Perform any necessary validations or processing here
+            alert("Forms saved successfully!");
+
+            // After saving, redirect to the next page (or wherever you want)
+            window.location.href = "{{ url_for('step3') }}";  // Replace with your next page route
+        }
+    </script>
+</head>
+<body>
+    {% if form_count == 0 %}
+    <h1>Welcome to the Product Owner Form</h1>
+    <form method="POST">
+        <button type="submit" name="add">Add New Product Owner</button>
+    </form>
+    <form method="POST">
+        <button type="submit" name="skip">Skip</button>
+    </form>
+    {% else %}
+    <h1>Add Product Owner Details</h1>
+    <form method="POST">
+        <div id="form-container">
+            {% for i in range(form_count) %}
+            <div>
+                <label for="owner_name-{{ i }}">Product Owner Name:</label>
+                <input type="text" id="owner_name-{{ i }}" name="owner_name-{{ i }}" required><br><br>
+
+                <label for="owner_zid-{{ i }}">Product Owner ZID:</label>
+                <input type="text" id="owner_zid-{{ i }}" name="owner_zid-{{ i }}" required><br><br>
+
+                <label for="owner_email-{{ i }}">Product Owner Email ID:</label>
+                <input type="email" id="owner_email-{{ i }}" name="owner_email-{{ i }}" required><br><br>
+
+                <label for="owner_type-{{ i }}">Product Owner Type:</label>
+                <select id="owner_type-{{ i }}" name="owner_type-{{ i }}" required>
+                    <option value="Member">Member</option>
+                    <option value="Owner">Owner</option>
+                </select><br><br>
+
+                <label for="valid_from-{{ i }}">Valid From:</label>
+                <input type="date" id="valid_from-{{ i }}" name="valid_from-{{ i }}" value="{{ form.valid_from.data }}" required><br><br>
+
+                <label for="valid_to-{{ i }}">Valid To:</label>
+                <input type="date" id="valid_to-{{ i }}" name="valid_to-{{ i }}" value="{{ form.valid_to.data }}" required><br><br>
+
+                <button type="button" onclick="removeForm(this)">Remove</button>
+            </div>
+            {% endfor %}
+        </div>
+        <button type="button" onclick="addForm()">Add Another Product Owner</button><br><br>
+        <button type="submit" name="save" onclick="saveAndMove()">Save and Move to Next Page</button>
+    </form>
+    {% endif %}
+</body>
+</html>
+
