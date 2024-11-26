@@ -1,0 +1,11 @@
+   import pandas as pd
+
+   # Convert the JSON data to a DataFrame
+   if isinstance(data, list):  # If the data is a list of records
+       df = pd.DataFrame(data)
+   else:  # If the data is a dictionary
+       df = pd.DataFrame([data])
+
+   # Display the DataFrame
+   print("Data as a table:")
+   display(df)
